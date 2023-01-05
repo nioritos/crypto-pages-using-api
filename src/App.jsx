@@ -44,7 +44,7 @@ function App() {
         <h1>Crypto Page</h1>
         <div>
           <input type="text" onChange={onChangeHandler} className="SearchCryptos" placeholder='Type your Crypto Name' />
-          <button ><strong>Search</strong></button>
+          <button><strong>Search</strong></button>
         </div>
       </div>
       <Container cryptos={cryptos} isLoading={isLoading} />
