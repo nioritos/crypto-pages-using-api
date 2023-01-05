@@ -2,27 +2,29 @@ import '../css/crypto.css'
 
 function Crypto(props) {
 
-    const {cryptoData, loadingInfo} = props;
+    const { cryptoData, loadingInfo } = props;
 
-    console.log(cryptoData)
 
     return (
         <>
             {loadingInfo ? (
-        cryptoData.map((cryptos, index) => {
-          return (
-            <div className="Card">
-              <img src={cryptos.image} alt={cryptos.name} />
-              <div key={index}>{cryptos.name}</div>
-              <div key={index}>{cryptos.current_price}</div>
+                cryptoData.map((cryptos, index) => {
+                    return (
+                        <div className="Card">
+                            <div className="content-card">
+                            <img src={cryptos.image} alt={cryptos.name} />
+                            <div className="cryptoInfo">
+                                <h1>{cryptos.name}</h1>
+                                <h4>${cryptos.current_price}</h4>
+                            </div>
+                        </div>
+                            </div>
 
-
-            </div>
-          )
-        })
-      ) : (
-        <div>the app is loading</div>
-      )}
+                    )
+                })
+            ) : (
+                <h1>the app is loading</h1>
+            )}
         </>
     )
 
