@@ -1,13 +1,16 @@
 import { useState, useEffect } from 'react'
-import './App.css'
+import './css/App.css'
 import axios from 'axios';
+import Container from './components/Container';
+
 
 function App() {
   const [cryptos, setCryptos] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const fetchDatas = async () => {
     try {
-      const response = await axios.get("https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=100&page=1&sparkline=false").then(data => {
+      const response = await axios.get("https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=100&page=1&sparkline=false")
+      .then(data => {
         setCryptos(data.data)
         setIsLoading(true)
         return data.data
@@ -22,24 +25,12 @@ function App() {
     fetchDatas();
   }, [])
 
+  console.log(cryptos)
   return (
-    <div className="container">
-      {isLoading ? (
-        cryptos.map((crypto, index) => {
-          return (
-            <>
-              <img src={crypto.image} alt={crypto.name} />
-              <div key={index}>{crypto.name}</div>
-              <div key={index}>{crypto.current_price}</div>
-              
+    <>
+      <Container cryptos={cryptos} isLoading={isLoading}/>
 
-            </>
-          )
-        })
-      ) : (
-        <div>the app is loading</div>
-      )}
-    </div>
+    </>
   )
 }
 
