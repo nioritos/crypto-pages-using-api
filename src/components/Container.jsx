@@ -1,16 +1,20 @@
-import '../css/container.css';
-import Crypto from './Crypto';
+import "../css/container.css";
+import Crypto from "./Crypto";
 function Container(props) {
+  const { cryptos, isLoading, pages, totalPages } = props;
 
-    const {cryptos, isLoading} = props;
-
-    return (
-        <>
-            <main className="container">
-                <Crypto cryptoData={cryptos} loadingInfo={isLoading}/>
-            </main>
-        </>
-    )
+  return (
+    <>
+      <main className="container">
+        <Crypto
+          cryptoData={cryptos}
+          loadingInfo={isLoading}
+          pages={pages}
+          totalPages={totalPages}
+        />
+      </main>
+    </>
+  );
 }
 
 export default Container;
