@@ -5,25 +5,27 @@ import Container from "./components/Container";
 import Pagination from "./components/Pagination";
 
 function App() {
-  const fetchListOfCrypto = async () => {
-    const dataOfList = await axios
-      .get("https://api.coingecko.com/api/v3/coins/list")
-      .then((d) => {
-        d.json();
-        console.log(d);
-      })
-      .catch((err) => console.log(err));
-
-    return dataOfList;
-  };
-
   const [pages, setPages] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
-  const itensPerpage = fetchListOfCrypto;
+  const [itensPerpage, setItensPerPage] = useState(100);
   const [cryptos, setCryptos] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [foundCryptos, setFoundCryptos] = useState("");
   const [runApp, setRunApp] = useState(false);
+
+  const fetchListOfCrypto = async () => {
+    const dataOfList = await axios
+      .get(
+        "https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc/"
+      )
+      .then((d) => {
+        return d.data.length;
+      })
+      .catch((err) => console.log(err));
+
+    setItensPerPage(dataOfList);
+  };
+
   const onChangeHandler = (value) => {
     let wordsOfCrypto = value.target.value;
     console.log(wordsOfCrypto);
@@ -41,6 +43,7 @@ function App() {
 
   const app = () => {
     fetchDatas();
+    fetchListOfCrypto();
     setRunApp(true);
   };
 
