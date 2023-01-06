@@ -1,14 +1,7 @@
 import "../css/crypto.css";
 
 function Crypto(props) {
-  const {
-    cryptoData,
-    loadingInfo,
-    totalPages,
-    pages,
-    onLeftClick,
-    onRightClick,
-  } = props;
+  const { cryptoData, loadingInfo } = props;
 
   return (
     <>

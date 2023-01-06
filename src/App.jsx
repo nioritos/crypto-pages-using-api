@@ -7,23 +7,25 @@ import Pagination from "./components/Pagination";
 function App() {
   const [pages, setPages] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
-  const [itensPerpage, setItensPerPage] = useState(100);
+  const [itensPerpage, setItensPerPage] = useState(20);
   const [cryptos, setCryptos] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [foundCryptos, setFoundCryptos] = useState("");
+  const [cryptoToShow, setCryptoToShow] = useState();
+  const [isHabilitToShowBySearch, setIsHabilitToShowBySearch] = useState(false);
   const [runApp, setRunApp] = useState(false);
 
-  const fetchListOfCrypto = async () => {
-    const dataOfList = await axios
-      .get(
-        "https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc/"
-      )
+  const searchCryptos = async (cryptoName) => {
+    cryptoName = foundCryptos;
+    console.log(cryptoName);
+    const response = await axios
+      .get(`https://api.coingecko.com/api/v3/search?query=${cryptoName}`)
       .then((d) => {
-        return d.data.length;
+        console.log(d.data.coins[0]);
+        setCryptoToShow(d.data.coins[0]);
+        setIsHabilitToShowBySearch(true);
       })
-      .catch((err) => console.log(err));
-
-    setItensPerPage(dataOfList);
+      .catch((error) => console.log(error));
   };
 
   const onChangeHandler = (value) => {
@@ -38,12 +40,15 @@ function App() {
     }
   };
   const onRightClick = () => {
-    setPages(pages + 1);
+    if (pages < totalPages - 1) {
+      setPages(pages + 1);
+    } else {
+      alert("you DO NOT skip for the next page.");
+    }
   };
 
   const app = () => {
     fetchDatas();
-    fetchListOfCrypto();
     setRunApp(true);
   };
 
@@ -56,10 +61,9 @@ function App() {
           }&sparkline=false`
         )
         .then((data) => {
-          // console.log(data.data.length);
           setCryptos(data.data);
           setIsLoading(true);
-          setTotalPages(Math.ceil(data.data.length / itensPerpage));
+          setTotalPages(Math.ceil(data.data.length / 2));
           return data.data;
         })
         .catch((err) => console.log(err));
@@ -85,7 +89,7 @@ function App() {
               className="SearchCryptos"
               placeholder="Type your Crypto Name"
             />
-            <button>
+            <button onClick={searchCryptos}>
               <strong>Search</strong>
             </button>
           </div>
@@ -100,8 +104,8 @@ function App() {
       <Container
         cryptos={cryptos}
         isLoading={isLoading}
-        pages={pages}
-        totalPages={totalPages}
+        cryptoToShow={cryptoToShow}
+        isHabilitToShowBySearch={isHabilitToShowBySearch}
       />
     </>
   );
